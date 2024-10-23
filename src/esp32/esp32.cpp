@@ -15,8 +15,14 @@ String password = "";
 String gas_url = "";
 unsigned int waittime = 0; // 待機時間（ミリ秒）
 
+//var for test
+int times = 0;
 bool rpi_helth = true;  // 試験継続のフラグ
 
+//func
+String getSerialInput_for_set(String);
+String getSerialInput(int);
+void sendResultsToSheet(int, String);
 
 void setup() {
   pinMode(relayPin, OUTPUT);
