@@ -1,0 +1,10 @@
+[Unit]
+Description=Send serial on boot
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /home/pi/rpi_disconnection_test/ser_send.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
