@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <WiFi.h>
 #include <HTTPClient.h>
 
@@ -24,9 +23,10 @@ String getSerialInput_for_set(String);
 String getSerialInput(int);
 void sendResultsToSheet(int, String);
 
+
 void setup() {
-  pinMode(relayPin, OUTPUT);
-  digitalWrite(relayPin, LOW); //リレー, デフォルトOFF 
+  pinMode(relay_pin, OUTPUT);
+  digitalWrite(relay_pin, LOW); //リレー, デフォルトOFF 
 
   // PCへの接続確立
   Serial.begin(baud_rate_pc);
@@ -34,9 +34,9 @@ void setup() {
   Serial.println("Connected");
 
   // RasPiへの接続確立
-  Serial_pi.begin(baud_rate_rpi, 16, 17);
+  Serial1.begin(baud_rate_rpi, 16, 17);
   delay(500);
-  Serial_pi.println("Connected to RasPi");
+  Serial1.println("Connected to RasPi");
 
   // SSIDとパスワードを受け取る
   Serial.println("Enter SSID and Password");
@@ -77,7 +77,7 @@ void loop() {
 
   if (input == ""){  
     rpi_helth = false;  // シリアルデータが来ない場合はフラグを変更
-    input = "no response"
+    input = "no response";
     }
 
   // 結果送信
@@ -87,12 +87,13 @@ void loop() {
   // シリアルデータが来なくなった場合にループを終了
   if (!rpi_helth) {
     Serial.println("Test terminated.");
-    Serial.println("RasPi booted " + times + "times");
+    Serial.println("RasPi booted " + (char)times + "times");
     while (true) {
       delay(1000); // 無限ループ
     }
   
   delay(1000);
+  }
 }
 
 // シリアル通信で入力を受け取り、改行までの文字列を返す
@@ -117,14 +118,14 @@ String getSerialInput_for_set(String prompt){
 
 // シリアル通信で入力をtimeoutか改行まで受け取り、文字列を返す
 String getSerialInput(int timeout) {
-  unsigned long startmiles = miles(); //シリアル受信開始時刻
+  unsigned long startmillis = millis(); //シリアル受信開始時刻
 
   String input = "";
   char c;
 
-  while (millis() - startMillis < timeout) {
-    if (Serial_pi.available() > 0) {
-      c = Serial_pi.read();
+  while (millis() - startmillis < timeout) {
+    if (Serial1.available() > 0) {
+      c = Serial1.read();
       if (c == '\n' || c == '\r') {
         break;
       }
@@ -139,7 +140,7 @@ String getSerialInput(int timeout) {
 void sendResultsToSheet(int times, String message) {
   if (WiFi.status() == WL_CONNECTED) {
     HTTPClient http;
-    http.begin(spreadsheet_url);
+    http.begin(gas_url);
 
     http.addHeader("Content-Type", "application/json");
     String jsonPayload = "{\"times\":\"" + String(times) + "\",\"message\":\"" + message + "\"}";
