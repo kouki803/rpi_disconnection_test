@@ -32,12 +32,17 @@ pip install pyserial
 [!Note]  
 You can use "pyenv" or "venv" if you want, but you probably don't need it  
 since OS dates on SD will corrupt and you have to clean install anyway.
+If using them, add "cd" to service file.  
+
+pyenvとかevnvは結局OSのデータが吹っ飛ぶので意味ないかも（笑  
+使う場合はserviceファイルのでcdなどする必要アリ
 
 ```
 git clone [This repository URL]
 ```
 
 ## service
+サービスファイルの登録
 ```
 sudo cp [path of service file] /etc/systemd/system/send_serial.service
 ```
