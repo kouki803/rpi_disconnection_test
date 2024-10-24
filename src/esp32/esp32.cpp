@@ -87,7 +87,9 @@ void loop() {
   // シリアルデータが来なくなった場合にループを終了
   if (!rpi_helth) {
     Serial.println("Test terminated.");
-    Serial.println("RasPi booted " + (char)times + "times");
+    Serial.print("RasPi booted times: ");
+    Serial.println(times);
+    
     while (true) {
       delay(1000); // 無限ループ
     }
